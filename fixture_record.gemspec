@@ -5,18 +5,16 @@ Gem::Specification.new do |spec|
   spec.version     = FixtureRecord::VERSION
   spec.authors     = ["Brad Schrag"]
   spec.email       = ["brad.schrag@gmail.com"]
-  spec.homepage    = "TODO"
-  spec.summary     = "TODO: Summary of FixtureRecord."
-  spec.description = "TODO: Description of FixtureRecord."
+  spec.homepage    = "https://github.com/bschrag620/fixture_record"
+  spec.summary     = "Summary of FixtureRecord."
+  spec.description = "Description of FixtureRecord."
   spec.license     = "MIT"
 
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
-  # to allow pushing to a single host or delete this section to allow pushing to any host.
-  spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+  spec.metadata["allowed_push_host"] = "http://mygemserver.com"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-  spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+  spec.metadata["source_code_uri"] = "https://github.com/bschrag620/fixture_record"
+  spec.metadata["changelog_uri"] = "https://github.com/bschrag620/fixture_record"
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
