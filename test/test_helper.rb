@@ -22,6 +22,7 @@ def with_fixture_file_reset(*klasses)
 
   yield
 
+ensure
   original_data.each do |klass, data|
     if data.nil?
       File.delete(fixture_path_for_klass)
