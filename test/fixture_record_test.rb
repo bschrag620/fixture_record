@@ -27,7 +27,7 @@ class FixtureRecordTest < ActiveSupport::TestCase
     with_fixture_file_reset(User) do
       refute yml_contents(User).key? user.test_fixture_name
       user.to_test_fixture
-      assert yml_contents(User).key? user.test_fixture_name + 'blue'
+      assert yml_contents(User).key? user.test_fixture_name
     end
   end
 end
