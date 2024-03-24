@@ -7,5 +7,9 @@ module FixtureRecord::Generators
     def create_fixture_record_schema
       # TODO - implement the generator
     end
+
+    def create_initializer
+			template "initializer.rb", Rails.root.join("config/initializers/fixture_record.rb")
+		end
   end
 end

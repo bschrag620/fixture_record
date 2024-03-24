@@ -126,6 +126,11 @@ And then execute:
 $ bundle install
 ```
 
+Finally, run the installer:
+```bash
+$ rails g fixture_record:install
+```
+
 ## Contributing
 Contribution directions go here.
 
