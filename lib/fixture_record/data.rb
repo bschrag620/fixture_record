@@ -14,6 +14,7 @@ class FixtureRecord::Data < Hash
   end
 
   def write!
+    FileUtils.mkdir_p(Rails.root.join('test/fixtures'))
     self.each do |klass, data|
       File.open(fixture_path_for(klass), 'w') { |f| f.write data.to_yaml }
     end
