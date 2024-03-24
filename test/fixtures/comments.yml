@@ -1,0 +1,8 @@
+---
+comment_1:
+  commentable_type: Post
+  commentable_id: <%= ActiveRecord::FixtureSet.identify(:post_1) %>
+  message: A new comment
+  user: user_two
+  created_at: 2024-03-24 18:23:02 UTC
+  updated_at: 2024-03-24 18:23:02 UTC

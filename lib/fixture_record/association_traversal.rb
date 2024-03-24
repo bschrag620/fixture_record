@@ -15,10 +15,6 @@ module FixtureRecord
       end
 
       def build
-        raise UnrecognizedAssociationError.new(
-          "#{@association} is not a recognized association or method on #{@source_record.class}. Is it misspelled?"
-        ) unless @source_record.respond_to?(@association)
-
         case @association
         when Array then ArrayBuilder.new(@source_record, @association).build
         when Hash then HashBuilder.new(@source_record, @association).build
@@ -38,6 +34,10 @@ module FixtureRecord
       end
 
       def build
+        raise UnrecognizedAssociationError.new(
+          "#{@symbol} is not a recognized association or method on #{@source_record.class}. Is it misspelled?"
+        ) unless @source_record.respond_to?(@symbol)
+
         built_records = Array.wrap(@source_record.send(@symbol)).compact_blank
         return unless built_records.present?
 

@@ -5,6 +5,7 @@ require "fixture_record/data"
 require "fixture_record/naming"
 require "fixture_record/association_traversal"
 require "fixture_record/filterable_attributes"
+require "fixture_record/belongs_to_updation"
 require "fixture_record/sanitizable"
 
 module FixtureRecord
@@ -19,6 +20,7 @@ module FixtureRecord
   include FixtureRecord::AssociationTraversal
   include FixtureRecord::FilterableAttributes
   include FixtureRecord::Sanitizable
+  include FixtureRecord::BelongsToUpdation
 
   Sanitizer = FixtureRecord::Sanitizable::Base
 

@@ -10,4 +10,13 @@ class TraversalTest < ActiveSupport::TestCase
       assert_equal 2, yml_contents_for(Post).length
     end
   end
+
+  test 'complex traversal' do
+    user = users(:user_one)
+    with_fixture_file_reset(User, Post, Comment) do
+      user.to_test_fixture(posts: [comments: :user])
+      assert_equal 2, yml_contents_for(User).length
+      assert_equal 1, yml_contents_for(Comment).length
+    end
+  end
 end
