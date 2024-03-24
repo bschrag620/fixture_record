@@ -1,11 +1,11 @@
 ---
-one:
-  email: MyString
-  first_name: MyString
-  last_name: MyString
-  password: MyString
-two:
-  email: MyString
-  first_name: MyString
-  last_name: MyString
-  password: MyString
+user_one:
+  email: email@one.com
+  first_name: User One
+  last_name: Tester
+  password: supersecret
+user_two:
+  email: email@two.com
+  first_name: User Two
+  last_name: Tester
+  password: supersecret

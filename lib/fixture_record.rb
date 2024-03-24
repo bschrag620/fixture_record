@@ -26,7 +26,7 @@ module FixtureRecord
     FixtureRecord.lock!(self)
     FixtureRecord.cache[self.test_fixture_name] ||= self
     traverse_fixture_record_associations(*associations)
-    FixtureRecord.cache.dump!
+    FixtureRecord.cache.dump! if  FixtureRecord.locked_by?(self)
   ensure
     FixtureRecord.release!(self)
   end

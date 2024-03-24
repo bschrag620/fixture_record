@@ -24,10 +24,11 @@ def with_fixture_file_reset(*klasses)
 
 ensure
   original_data.each do |klass, data|
+    filepath = fixture_path_for(klass)
     if data.nil?
-      File.delete(fixture_path_for_klass)
+      File.delete(filepath) if File.exist?(filepath)
     else
-      File.open(fixture_path_for(klass), 'w') { |f| f.write data.to_yaml }
+      File.open(filepath, 'w') { |f| f.write data.to_yaml }
     end
   end
 end
@@ -35,3 +36,7 @@ end
 def fixture_path_for(klass)
   Rails.root.join('test/fixtures', klass.table_name + '.yml')
 end
+
+def yml_contents_for(klass)
+    YAML.load_file(Rails.root.join('test/fixtures', klass.table_name + '.yml'))
+  end
