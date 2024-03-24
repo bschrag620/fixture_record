@@ -16,6 +16,17 @@ class TraversalTest < ActiveSupport::TestCase
     with_fixture_file_reset(User, Post, Comment) do
       user.to_test_fixture(posts: [comments: :user])
       assert_equal 2, yml_contents_for(User).length
+      assert_equal 2, yml_contents_for(Post).length
+      assert_equal 1, yml_contents_for(Comment).length
+    end
+  end
+
+  test 'starting in the middle' do
+    post = posts(:post_1)
+    with_fixture_file_reset(User, Post, Comment) do
+      post.to_test_fixture(:author, comments: :user)
+      assert_equal 2, yml_contents_for(User).length
+      assert_equal 1, yml_contents_for(Post).length
       assert_equal 1, yml_contents_for(Comment).length
     end
   end

@@ -8,4 +8,4 @@ gem "puma"
 
 gem "sqlite3"
 
-gem "pry"
+gem "pry", "~> 0.14.2", :group => :development

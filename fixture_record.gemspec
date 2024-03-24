@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.authors     = ["Brad Schrag"]
   spec.email       = ["brad.schrag@gmail.com"]
   spec.homepage    = "https://github.com/bschrag620/fixture_record"
-  spec.summary     = "Summary of FixtureRecord."
-  spec.description = "Description of FixtureRecord."
+  spec.summary     = "Helper library for generating test fixtures."
+  spec.description = "Helper library for generating test fixtures for existing records and their associated associations and relationships."
   spec.license     = "MIT"
 
   spec.metadata["allowed_push_host"] = "http://mygemserver.com"
@@ -17,8 +17,8 @@ Gem::Specification.new do |spec|
   spec.metadata["changelog_uri"] = "https://github.com/bschrag620/fixture_record"
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+    Dir["{lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   end
 
-  spec.add_dependency "rails", ">= 7.1.3.2"
+  spec.add_dependency "rails", ">= 6"
 end
