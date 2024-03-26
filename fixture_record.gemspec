@@ -10,8 +10,6 @@ Gem::Specification.new do |spec|
   spec.description = "Helper library for generating test fixtures for existing records and their associated associations and relationships."
   spec.license     = "MIT"
 
-  spec.metadata["allowed_push_host"] = "http://mygemserver.com"
-
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/bschrag620/fixture_record"
   spec.metadata["changelog_uri"] = "https://github.com/bschrag620/fixture_record"
