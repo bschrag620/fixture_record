@@ -13,6 +13,8 @@ if ActiveSupport::TestCase.respond_to?(:fixture_paths=)
   ActiveSupport::TestCase.fixtures :all
 end
 
+require 'minitest/mock'
+require 'minitest/stub_any_instance'
 
 def with_fixture_file_reset(*klasses)
   original_data = klasses.to_h do |klass|

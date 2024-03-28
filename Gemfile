@@ -9,3 +9,5 @@ gem "puma"
 gem "sqlite3"
 
 gem "pry", "~> 0.14.2", :group => :development
+
+gem "minitest-stub_any_instance", "~> 1.0", :group => :test
