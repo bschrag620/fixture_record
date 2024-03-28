@@ -86,6 +86,25 @@ post_12:
   author_id: 49
 ```
 
+### Through Associations
+`FixtureRecord` will automatically attempt to infill any missing associations when an association utilizes a `through` option. Taking the blog example, consider a `User` class:
+```ruby
+class User
+  has_many :posts
+  has_many :post_comments, through: :posts, source: :comments
+  has_many :commenting_users, through: :post_comments, source: :user
+end
+```
+Because of through association infilling the following 3 lines will produce identical results:
+```ruby
+user.to_test_fixture(posts: [comments: :users])
+
+user.to_test_fixture(:posts, :post_comments, :commenting_users)
+
+user.to_test_fixutre(:commenting_users)
+```
+The reason the third example will infill the other associations is because those associations are required to create a clear path between the originating record and the final records. Without those intermediary associations, the `:commenting_users` would be orphaned from the `user` record.
+
 ### FixtureRecord::Naming
 There might be instances where a record was used for a particular test fixture and you want to use this same record again for a different test case but want to keep the data isolated. `FixtureRecord::Naming` (automatically included with FixtureRecord) provides`fixture_record_prefix` and `fixture_record_suffix`. These values are propagated to the associated records when calling `to_test_fixture`.
 ```ruby
