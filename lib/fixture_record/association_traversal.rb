@@ -2,7 +2,10 @@ module FixtureRecord
   module AssociationTraversal
     class UnrecognizedAssociationError < StandardError; end
 
+    attr_accessor :_traversed_fixture_record_associations
+
     def traverse_fixture_record_associations(*associations)
+      self._traversed_fixture_record_associations = []
       associations.each do |association|
         Builder.new(self, association).build
       end
@@ -36,8 +39,13 @@ module FixtureRecord
       def build
         raise UnrecognizedAssociationError.new(
           "#{@symbol} is not a recognized association or method on #{@source_record.class}. Is it misspelled?"
-        ) unless @source_record.respond_to?(@symbol)
+        ) unless klass_association.present?
 
+        if through_assoc_option && @source_record._traversed_fixture_record_associations.exclude?(through_assoc_option)
+          infill_through
+        end
+
+        @source_record._traversed_fixture_record_associations << @symbol
         built_records = Array.wrap(@source_record.send(@symbol)).compact_blank
         return unless built_records.present?
 
@@ -48,6 +56,17 @@ module FixtureRecord
         end
       end
 
+      def infill_through
+        SymbolBuilder.new(@source_record, through_assoc_option).build
+      end
+
+      def through_assoc_option
+        klass_association.options[:through]
+      end
+
+      def klass_association
+        @source_record.class.reflect_on_association(@symbol)
+      end
     end
 
     class HashBuilder

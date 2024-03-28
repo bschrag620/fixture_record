@@ -86,6 +86,9 @@ post_12:
   author_id: 49
 ```
 
+### Through Associations
+`FixtureRecord` will automatically attempt to infill any missing associations when an association utilizes a `through` option.
+
 ### FixtureRecord::Naming
 There might be instances where a record was used for a particular test fixture and you want to use this same record again for a different test case but want to keep the data isolated. `FixtureRecord::Naming` (automatically included with FixtureRecord) provides`fixture_record_prefix` and `fixture_record_suffix`. These values are propagated to the associated records when calling `to_test_fixture`.
 ```ruby

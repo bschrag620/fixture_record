@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fixture_record (0.1.0)
+    fixture_record (0.1.0.pre.rc)
       rails (>= 6)
 
 GEM
@@ -111,6 +111,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.5)
     minitest (5.22.3)
+    minitest-stub_any_instance (1.0.3)
     mutex_m (0.2.0)
     net-imap (0.4.10)
       date
@@ -211,6 +212,7 @@ PLATFORMS
 
 DEPENDENCIES
   fixture_record!
+  minitest-stub_any_instance (~> 1.0)
   pry (~> 0.14.2)
   puma
   sqlite3
