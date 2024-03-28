@@ -9,7 +9,10 @@ module FixtureRecord::Generators
     end
 
     def create_initializer
-			template "initializer.rb", Rails.root.join("config/initializers/fixture_record.rb")
+      application(nil, env: :development) do
+        "require Rails.root.join('fixture_record', 'initializer.rb')\n"
+      end
+			template "initializer.rb", Rails.root.join("fixture_record/initializer.rb")
 		end
   end
 end
