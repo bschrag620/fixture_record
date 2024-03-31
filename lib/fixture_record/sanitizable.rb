@@ -1,9 +1,6 @@
 module FixtureRecord::Sanitizable
   extend ActiveSupport::Concern
 
-  class_methods do
-  end
-
   def sanitize_attributes_for_test_fixture
     _fixture_record_attributes.each do |attr, value|
       registry_key = [self.class.name, attr.to_s].join('.')
@@ -24,24 +21,23 @@ module FixtureRecord::Sanitizable
   end
 
   class Registry
-    @_fixture_record_sanitizer_pattern_registry = {}
+    @_fixture_record_sanitizer_pattern_registry = []
     @_fixture_record_sanitizer_name_registry = {}
 
-    def self.register_sanitizer(klass, *patterns, as: nil)
-      if as
-        @_fixture_record_sanitizer_name_registry[as.to_sym] = klass.new
-      end
-      patterns.each do |pattern|
-        @_fixture_record_sanitizer_pattern_registry[pattern] = klass.new
-      end
+    def self.[](...)
+      @_fixture_record_sanitizer_name_registry.send(:[], ...)
+    end
+
+    def self.sanitize_pattern(pattern, with:)
+       @_fixture_record_sanitizer_pattern_registry << [pattern, with]
+    end
+
+    def self.register_sanitizer(klass, as: nil)
+      @_fixture_record_sanitizer_name_registry[as.to_sym] = klass.new
     end
 
     def self.fetch(to_be_matched)
-      if @_fixture_record_sanitizer_name_registry.key?(to_be_matched)
-        @_fixture_record_sanitizer_name_registry[to_be_matched]
-      else
-        @_fixture_record_sanitizer_pattern_registry.select { |pattern, value| to_be_matched.match(pattern) }.values
-      end
+      @_fixture_record_sanitizer_pattern_registry.select { |pattern, value| to_be_matched.match(pattern) }.map(&:last)
     end
   end
 end
