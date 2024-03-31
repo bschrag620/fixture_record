@@ -1,6 +1,6 @@
 module FixtureRecord
   class Configuration
-    def naming=(proc_or_klass)
+    def name_records_with(proc_or_klass)
       FixtureRecord.naming = proc_or_klass.is_a?(Class) ? proc_or_klass.new : proc_or_klass
     end
 

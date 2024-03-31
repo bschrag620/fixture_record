@@ -1,7 +1,7 @@
 FixtureRecord.configure do |config|
   # To customize how fixtures are named, provide a class the responds to #call or a Proc.
   # The naming object will receive the record and should return a String
-  # config.naming = FixtureRecord::Naming::Base
+  # config.name_records_with = FixtureRecord::Naming::Base
 
   # Create and register custom sanitizers to format, sanitiize, obfuscate, etc. the data before it is
   # turned into a test fixture. Regex patterns are used to determine if a column should be passed to a

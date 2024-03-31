@@ -6,7 +6,7 @@ module FixtureRecord
     class Base
       def call(record)
 
-        [record.fixture_record_prefix, record.class.model_name.param_key, record.id || 'new', record.fixture_record_suffix].compact_blank.join
+        [record.fixture_record_prefix, record.class.model_name.param_key, record.id || 'new', record.fixture_record_suffix].compact_blank.join('_')
       end
     end
 

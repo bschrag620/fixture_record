@@ -28,8 +28,12 @@ module FixtureRecord::Sanitizable
       @_fixture_record_sanitizer_name_registry.send(:[], ...)
     end
 
+    def self.deregister(klass_or_symbol)
+      @_fixture_record_sanitizer_pattern_registry.delete_if { |pattern, with| with == klass_or_symbol }
+    end
+
     def self.sanitize_pattern(pattern, with:)
-       @_fixture_record_sanitizer_pattern_registry << [pattern, with]
+      @_fixture_record_sanitizer_pattern_registry << [pattern, with]
     end
 
     def self.register_sanitizer(klass, as: nil)
