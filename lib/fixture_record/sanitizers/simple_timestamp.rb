@@ -8,4 +8,3 @@ module FixtureRecord
     FixtureRecord.registry.register_sanitizer(FixtureRecord::Sanitizers::SimpleTimestamp, as: :simple_timestamp)
   end
 end
-
