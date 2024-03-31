@@ -7,10 +7,15 @@ require "fixture_record/association_traversal"
 require "fixture_record/filterable_attributes"
 require "fixture_record/belongs_to_updation"
 require "fixture_record/sanitizable"
+require "fixture_record/configuration"
 
 module FixtureRecord
   extend ActiveSupport::Concern
-  mattr_accessor :_locked_by, :cache, :data
+  mattr_accessor :_locked_by,
+    :cache,
+    :data
+
+  mattr_accessor :naming, default: FixtureRecord::Naming::Base.new
 
   included do
     attr_accessor :_fixture_record_attributes
@@ -33,7 +38,17 @@ module FixtureRecord
     FixtureRecord.release!(self)
   end
 
+
   class << self
+    def configure
+      yield config
+    end
+
+    def config
+      @@config ||= Configuration.new
+    end
+
+
     def lock!(owner)
       return if locked?
 

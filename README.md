@@ -124,6 +124,86 @@ foo_post_49:
   ...
 ```
 
+## Data Sanitizing and Obfuscation
+`FixtureRecord` supports mutating data before writing the data. By default, `FixtureRecord` has a built in sanitizer that is used for `created_at` and `updated_at` fields. The reason for the `simple_timestamp` is that Rails will turn a timestamp into a complex object when calling `to_yaml`.
+```ruby
+user.attributes.to_yaml
+# =>
+id: ...
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2024-03-17 23:11:31.329037000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2024-03-17 23:11:31.329037000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2024-03-17 23:11:31.329037000 Z
+  zone: *1
+  time: 2024-03-17 23:11:31.329037000 Z
+```
+This type of timestamp structure isn't needed and can simply clutter up a fixture file. So instead, `FixtureRecord` comes with a sanitizer to clean this up.
+```ruby
+# lib/fixture_record/sanitizers/simple_timestamp
+module FixtureRecord
+  module Sanitizers
+    class SimpleTimestamp < FixtureRecord::Sanitizer
+      def cast(value)
+        value.to_s
+      end
+    end
+    FixtureRecord.registry.register_sanitizer(FixtureRecord::Sanitizers::SimpleTimestamp, as: :simple_timestamp)
+  end
+end
+
+# fixture_record/initializer.rb (created using the install script)
+FixtureRecord.configure do |config|
+  ...
+
+  config.sanitize_pattern /created_at$|updated_at$/, with: :simple_timestamp
+
+  ...
+end
+```
+
+In this case, any column the regex pattern of 'created_at' or 'updated_at' will have its value passed to the registered sanitizer class.
+
+### Creating a Custom Sanitizer
+Step one, create the custom class. Inheriting from `FixtureRecord::Sanitizer` is not a requirement currently, but there might be some nice-to-have features as part of that class in the future. At minimum, your custom class needs to have at minimum a `#cast` instance method that will receive the value that is to be sanitized and returns the newly converted value. Currently, `#cast` will be called whether the value is `nil` or not, so be sure your method can handle the `nil` scenario.
+```ruby
+class MyReverseSanitizer < FixtureRecord::Sanitizer
+  def cast(value)
+    value&.reverse
+  end
+end
+```
+
+### Registering the Sanitizer
+In your custom class, or in the initializer, register the new sanitizer.
+```ruby
+class MyReverseSanitizer < FixtureRecord::Sanitizer
+  ...
+end
+
+FixtureRecord.registry.register_sanitizer MyReverseSanitizer, :reverse
+```
+### Assiging the Sanitizer to a Pattern
+In the fixture record initializer, use `#sanitize_pattern` to assign the registered sanitizer to a regex pattern. In the following example code, any column that matches `email` would be sent through the reverse sanitizer, this would include `email`, `user_email`, `primary_email`, etc.
+```ruby
+# fixture_record/initializer.rb
+FixtureRecord.configure do |config|
+  ...
+
+  config.sanitize_pattern /email/, with: :reverse
+
+  ...
+end
+```
+
+The pattern that is used for comparison is inclusive of the class name as well. So if you need a sanitizer to be scoped to a specific class you can use the class name in the regex pattern. Taking the example above:
+```ruby
+config.sanitize_pattern /User.email/, with: :reverse
+```
+Now columns on other classes that include `email` in their name won't be passed to the sanitizer. Also keep in mind the mechanism being used here is basic regex pattern matching, so `User.primary_email` wouldn't match in this case and would not be sent to the sanitizer.
+
 ## Installation
 `FixtureRecord` is only needed as a development dependency.
 ```ruby
