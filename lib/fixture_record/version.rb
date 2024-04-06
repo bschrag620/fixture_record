@@ -1,3 +1,3 @@
 module FixtureRecord
-  VERSION = "0.1.2-rc"
+  VERSION = "1.0"
 end
