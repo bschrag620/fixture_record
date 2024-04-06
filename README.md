@@ -1,12 +1,12 @@
 # FixtureRecord
-When it comes to testing, ActiveRecrod::Fixtures provide a huge performance benefit over FactoryBot but at the expense of setting up the necessary test data. For complex associations and relationships, a large amount of time might be spent simply trying to setup the data. FixtureRecord provides a `to_test_fixture` method that accepts a chain of associations as an argument that allows you to quickly turn a large collection of existing records into test fixtures.
+When it comes to testing, ActiveRecrod::Fixtures provide a huge performance benefit over FactoryBot but at the expense of setting up the necessary test data. For complex associations and relationships, a large amount of time might be spent simply trying to setup the data. FixtureRecord provides a `to_fixture_record` method that accepts a chain of associations as an argument that allows you to quickly turn a large collection of existing records into test fixtures.
 
 ## Usage
-`to_test_fixture` is a method that will turn the record into a test fixture. By default, the name of the fixture record will be `param_key` of the record's class and the record's id joined with `_`.
+`to_fixture_record` is a method that will turn the record into a test fixture. By default, the name of the fixture record will be `param_key` of the record's class and the record's id joined with `_`.
 
 ```ruby
 user = User.find(1)
-user.to_test_fixture
+user.to_fixture_record
 
 # creates test/fixtures/users.yml if it does not exists
 ```
@@ -41,7 +41,7 @@ Let's say an edge case bug has been found with a particular post and it's relate
 
 ```ruby
 edge_case_post = Post.find ...
-edge_case_post.to_test_fixture(:author, comments: :user)
+edge_case_post.to_fixture_record(:author, comments: :user)
 ```
 This would create a test fixture for the post, its author, all the comments on the post and their respective users. This will also change the `belongs_to` relationships in the yaml files to reflect their respective fixture counterparts. For example, if `Post#12` author is `User#49`,
 and the post has `Comment#27` the fixture records might look like:
@@ -63,7 +63,7 @@ comment_27:
   commentable: post_12 (Post)
 ```
 
-Note that these changes to the `belongs_to` associations is only applicable to records that are part of the associations that are being passed into `to_test_fixture`. So taking the same example as above, `edge_case_post.to_test_fixture` would yield the following:
+Note that these changes to the `belongs_to` associations is only applicable to records that are part of the associations that are being passed into `to_fixture_record`. So taking the same example as above, `edge_case_post.to_fixture_record` would yield the following:
 ```yaml
 post_12:
   author_id: 49
@@ -71,8 +71,8 @@ post_12:
 
 Currently, `FixtureRecord` will also not attempt to already existing fixtures to newly created data.
 ```ruby
-User.find(49).to_test_fixture
-Post.find(12).to_test_fixture
+User.find(49).to_fixture_record
+Post.find(12).to_fixture_record
 ```
 The above would yield fixtures that are not associated to one another.
 ```yaml
@@ -97,19 +97,19 @@ end
 ```
 Because of through association infilling the following 3 lines will produce identical results:
 ```ruby
-user.to_test_fixture(posts: [comments: :users])
+user.to_fixture_record(posts: [comments: :users])
 
-user.to_test_fixture(:posts, :post_comments, :commenting_users)
+user.to_fixture_record(:posts, :post_comments, :commenting_users)
 
 user.to_test_fixutre(:commenting_users)
 ```
 The reason the third example will infill the other associations is because those associations are required to create a clear path between the originating record and the final records. Without those intermediary associations, the `:commenting_users` would be orphaned from the `user` record.
 
 ### FixtureRecord::Naming
-There might be instances where a record was used for a particular test fixture and you want to use this same record again for a different test case but want to keep the data isolated. `FixtureRecord::Naming` (automatically included with FixtureRecord) provides`fixture_record_prefix` and `fixture_record_suffix`. These values are propagated to the associated records when calling `to_test_fixture`.
+There might be instances where a record was used for a particular test fixture and you want to use this same record again for a different test case but want to keep the data isolated. `FixtureRecord::Naming` (automatically included with FixtureRecord) provides`fixture_record_prefix` and `fixture_record_suffix`. These values are propagated to the associated records when calling `to_fixture_record`.
 ```ruby
 user.test_fixture_prefix = :foo
-user.to_test_fixture(:posts)
+user.to_fixture_record(:posts)
 
 # users.yml
 
@@ -158,7 +158,7 @@ end
 FixtureRecord.configure do |config|
   ...
 
-  config.sanitize_pattern /created_at$|updated_at$/, with: :simple_timestamp
+  config.sanitize_column_regex /created_at$|updated_at$/, with: :simple_timestamp
 
   ...
 end
@@ -186,13 +186,13 @@ end
 FixtureRecord.registry.register_sanitizer MyReverseSanitizer, :reverse
 ```
 ### Assiging the Sanitizer to a Pattern
-In the fixture record initializer, use `#sanitize_pattern` to assign the registered sanitizer to a regex pattern. In the following example code, any column that matches `email` would be sent through the reverse sanitizer, this would include `email`, `user_email`, `primary_email`, etc.
+In the fixture record initializer, use `#sanitize_column_regex` to assign the registered sanitizer to a regex pattern. In the following example code, any column that matches `email` would be sent through the reverse sanitizer, this would include `email`, `user_email`, `primary_email`, etc.
 ```ruby
 # fixture_record/initializer.rb
 FixtureRecord.configure do |config|
   ...
 
-  config.sanitize_pattern /email/, with: :reverse
+  config.sanitize_column_regex /email/, with: :reverse
 
   ...
 end
@@ -200,7 +200,7 @@ end
 
 The pattern that is used for comparison is inclusive of the class name as well. So if you need a sanitizer to be scoped to a specific class you can use the class name in the regex pattern. Taking the example above:
 ```ruby
-config.sanitize_pattern /User.email/, with: :reverse
+config.sanitize_column_regex /User.email/, with: :reverse
 ```
 Now columns on other classes that include `email` in their name won't be passed to the sanitizer. Also keep in mind the mechanism being used here is basic regex pattern matching, so `User.primary_email` wouldn't match in this case and would not be sent to the sanitizer.
 

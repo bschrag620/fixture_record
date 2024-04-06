@@ -24,9 +24,9 @@ module FixtureRecord
 
     def prepare!
       self.values
-        .each(&:filter_attributes_for_test_fixture)
-        .each(&:sanitize_attributes_for_test_fixture)
-        .each(&:update_belongs_to_test_fixture_associations)
+        .each(&:filter_attributes_for_fxiture_record)
+        .each(&:sanitize_attributes_for_fxiture_record)
+        .each(&:update_belongs_to_fixture_record_associations)
     end
   end
 end

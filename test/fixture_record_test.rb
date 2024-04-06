@@ -9,7 +9,7 @@ class FixtureRecordTest < ActiveSupport::TestCase
     user = users(:user_one)
     with_fixture_file_reset(User) do
       refute yml_contents_for(User).key? user.test_fixture_name
-      user.to_test_fixture
+      user.to_fixture_record
       assert yml_contents_for(User).key? user.test_fixture_name
     end
   end
@@ -22,7 +22,7 @@ class FixtureRecordTest < ActiveSupport::TestCase
     assert user.test_fixture_name.end_with?('bar')
     with_fixture_file_reset(User) do
       refute yml_contents_for(User).key? user.test_fixture_name
-      user.to_test_fixture
+      user.to_fixture_record
       assert yml_contents_for(User).key? user.test_fixture_name
     end
   end

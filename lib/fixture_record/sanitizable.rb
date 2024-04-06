@@ -1,7 +1,7 @@
 module FixtureRecord::Sanitizable
   extend ActiveSupport::Concern
 
-  def sanitize_attributes_for_test_fixture
+  def sanitize_attributes_for_fxiture_record
     _fixture_record_attributes.each do |attr, value|
       registry_key = [self.class.name, attr.to_s].join('.')
       _fixture_record_attributes[attr] = sanitize_value_for_test_fixture(registry_key, value)

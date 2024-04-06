@@ -1,6 +1,6 @@
 module FixtureRecord
   module FilterableAttributes
-    def filter_attributes_for_test_fixture
+    def filter_attributes_for_fxiture_record
       self._fixture_record_attributes = FilteredAttributes.new(self).cast
     end
 

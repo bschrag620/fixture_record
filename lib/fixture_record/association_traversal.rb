@@ -52,7 +52,7 @@ module FixtureRecord
         built_records.each do |record|
           record.fixture_record_prefix = @source_record.fixture_record_prefix
           record.fixture_record_suffix = @source_record.fixture_record_suffix
-          record.to_test_fixture(*@next_associations)
+          record.to_fixture_record(*@next_associations)
         end
       end
 

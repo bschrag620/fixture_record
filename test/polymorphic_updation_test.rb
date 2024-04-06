@@ -5,7 +5,7 @@ class PolymorphicUpdationTest < ActiveSupport::TestCase
     post = posts(:post_1)
 
     with_fixture_file_reset(Post, Comment) do
-      post.to_test_fixture(:comments)
+      post.to_fixture_record(:comments)
       comment = post.comments.first
 
       comment_fixture = yml_contents_for(Comment)[comment.test_fixture_name]

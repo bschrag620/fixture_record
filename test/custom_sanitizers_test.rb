@@ -8,11 +8,11 @@ class CustomSanitizer < ActiveSupport::TestCase
       end
     end
 
-    FixtureRecord.config.sanitize_pattern /created_at/, with: ReverseCreatedAt
+    FixtureRecord.sanitize_column_regex /created_at/, with: ReverseCreatedAt
 
     user = users(:user_one)
     with_fixture_file_reset(User) do
-      user.to_test_fixture
+      user.to_fixture_record
       user_content = yml_contents_for(User)
 
       assert_equal user_content.dig(user.test_fixture_name, 'created_at'), user.created_at.to_s.reverse

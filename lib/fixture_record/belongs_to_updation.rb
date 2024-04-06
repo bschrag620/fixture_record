@@ -2,7 +2,7 @@ module FixtureRecord
   module BelongsToUpdation
     extend ActiveSupport::Concern
 
-    def update_belongs_to_test_fixture_associations
+    def update_belongs_to_fixture_record_associations
       self.class.reflect_on_all_associations(:belongs_to).each do |assoc|
         klass_name = assoc.options[:polymorphic] ? send(assoc.foreign_type) : assoc.class_name
         next unless klass_name.nil? || FixtureRecord.cache.contains_class?(klass_name)

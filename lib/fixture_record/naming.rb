@@ -11,7 +11,7 @@ module FixtureRecord
     end
 
     def test_fixture_name
-      FixtureRecord.naming.call(self)
+      FixtureRecord.name_handler.call(self)
     end
   end
 end
