@@ -1,13 +1,6 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  # By default, fixture_record will only inject itself in the development environment.
-  # If you want it available in `test` or `production` (or other environments), please add
-  # this require line to those environment ruby files. Alternatively, if you want it to
-  # always be loaded, you can relocate the generated `fixture_record/initializer.rb` to
-  # `app/config/initializers/fixture_record.rb` or require this file in  `config/application.rb`.
-  require Rails.root.join('fixture_record', 'initializer.rb')
-
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time

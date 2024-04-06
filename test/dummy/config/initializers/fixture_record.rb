@@ -1,4 +1,4 @@
-if Rails.env.development?
+if Rails.env.development? || Rails.env.test?
   FixtureRecord.configure do |config|
     # To customize how fixtures are named, provide a class the responds to #call or a Proc.
     # The name handler object will receive the record and should return a String

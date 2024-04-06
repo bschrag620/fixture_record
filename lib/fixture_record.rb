@@ -7,7 +7,6 @@ require "fixture_record/association_traversal"
 require "fixture_record/filterable_attributes"
 require "fixture_record/belongs_to_updation"
 require "fixture_record/sanitizable"
-require "fixture_record/configuration"
 
 module FixtureRecord
   extend ActiveSupport::Concern
@@ -15,7 +14,9 @@ module FixtureRecord
     :cache,
     :data
 
-  mattr_accessor :naming, default: FixtureRecord::Naming::Base.new
+  mattr_accessor :name_handler, default: FixtureRecord::Naming::Base.new
+  mattr_accessor :sanitizers, default: []
+  mattr_accessor :base_path, default: -> { Rails.root.join('test/fixtures') }
 
   included do
     attr_accessor :_fixture_record_attributes
@@ -29,7 +30,7 @@ module FixtureRecord
 
   Sanitizer = FixtureRecord::Sanitizable::Base
 
-  def to_test_fixture(*associations)
+  def to_fixture_record(*associations)
     FixtureRecord.lock!(self)
     FixtureRecord.cache[self.test_fixture_name] ||= self
     traverse_fixture_record_associations(*associations)
@@ -41,13 +42,23 @@ module FixtureRecord
 
   class << self
     def configure
-      yield config
+      yield self
     end
 
-    def config
-      @@config ||= Configuration.new
+    def base_path
+      @@base_path.is_a?(String) ? @@base_path : @@base_path.call
     end
 
+    def name_handler=(proc_or_klass)
+      @@name_handler = proc_or_klass.is_a?(Class) ? proc_or_klass.new : proc_or_klass
+    end
+
+    def sanitize_column_regex(col_regex, with:)
+      registry_name_or_klass = with
+      klass = registry_name_or_klass.is_a?(Symbol) ? FixtureRecord.registry[registry_name_or_klass] : registry_name_or_klass
+      klass_instance = klass.is_a?(Class) ? klass.new : klass
+      FixtureRecord.registry.sanitize_pattern col_regex, with: klass_instance
+    end
 
     def lock!(owner)
       return if locked?

@@ -14,14 +14,18 @@ class FixtureRecord::Data < Hash
   end
 
   def write!
-    FileUtils.mkdir_p(Rails.root.join('test/fixtures'))
+    FileUtils.mkdir_p(FixtureRecord.base_path)
     self.each do |klass, data|
       File.open(fixture_path_for(klass), 'w') { |f| f.write data.to_yaml }
     end
   end
 
   def fixture_path_for(klass)
-    Rails.root.join('test/fixtures', klass.table_name + '.yml')
+    if FixtureRecord.base_path.is_a?(String)
+      [FixtureRecord.base_path, klass.table_name + '.yml'].join('/')
+    else
+      FixtureRecord.base_path.join(klass.table_name + '.yml')
+    end
   end
 
   def merge_record(record)
