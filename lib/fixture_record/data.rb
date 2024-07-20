@@ -9,14 +9,16 @@ class FixtureRecord::Data < Hash
     if File.exist?(fixture_path_for(klass))
       YAML.load_file(fixture_path_for(klass))
     else
-      {}
+      {'_fixture' => {'model_class' => klass.name}}
     end
   end
 
   def write!
     FileUtils.mkdir_p(FixtureRecord.base_path)
     self.each do |klass, data|
-      File.open(fixture_path_for(klass), 'w') { |f| f.write data.to_yaml }
+      File.open(fixture_path_for(klass), 'w') do |f|
+        f.write data.to_yaml
+      end
     end
   end
 
