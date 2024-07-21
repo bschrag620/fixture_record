@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fixture_record (0.1.2.pre.rc)
+    fixture_record (1.0)
       rails (>= 6)
 
 GEM
