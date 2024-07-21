@@ -7,6 +7,7 @@ require "fixture_record/association_traversal"
 require "fixture_record/filterable_attributes"
 require "fixture_record/belongs_to_updation"
 require "fixture_record/sanitizable"
+require "fixture_record/loader"
 
 module FixtureRecord
   extend ActiveSupport::Concern
@@ -60,6 +61,14 @@ module FixtureRecord
       FixtureRecord.registry.sanitize_pattern col_regex, with: klass_instance
     end
 
+    def load!(...)
+      FixtureRecord::Loader.load!(...)
+    end
+
+    def registry
+      FixtureRecord::Sanitizable::Registry
+    end
+
     def lock!(owner)
       return if locked?
 
@@ -86,9 +95,6 @@ module FixtureRecord
       @@_locked_by == owner
     end
 
-    def registry
-      FixtureRecord::Sanitizable::Registry
-    end
   end
 end
 
