@@ -11,6 +11,7 @@ class FixtureRecordTest < ActiveSupport::TestCase
       refute yml_contents_for(User).key? user.test_fixture_name
       user.to_fixture_record
       assert yml_contents_for(User).key? user.test_fixture_name
+      assert yml_contents_for(User).key? '_fixture'
     end
   end
 

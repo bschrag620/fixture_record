@@ -6,7 +6,7 @@ class BelongsToUpdation < ActiveSupport::TestCase
     with_fixture_file_reset(User, Post) do
       user.to_fixture_record(:posts)
       post_fixtures = yml_contents_for(Post)
-      assert_includes post_fixtures.values.first.keys, 'author'
+      assert_includes post_fixtures.values.second.keys, 'author'
     end
   end
 end
